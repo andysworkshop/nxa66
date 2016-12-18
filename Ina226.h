@@ -52,6 +52,10 @@ namespace nxa66 {
 
     uint16_t cfg = 0x4000 | (averaging << 9) | (vbuscvt << 6) | (shuntcvt << 3) | opmode;
     writeRegister(CONFIGURATION,cfg);
+
+    // based on 20A current, 2m shunt resistor, 1mA/bit resolution
+
+    writeRegister(CALIBRATION,2560);    
   }
 
 

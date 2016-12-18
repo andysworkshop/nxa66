@@ -47,12 +47,20 @@ namespace nxa66 {
 
   inline void Voltmeter::updateDisplay() {
 
+    // enforce a minimum sample period
+
     if(MillisecondTimer::difference(_lastSampleTime)<SAMPLE_INTERVAL)
       return;
 
-    uint32_t voltage=Ina226::readBusVoltage();
+    // read the voltage
 
+    uint32_t voltage=Ina226::readBusVoltage();
     Max7221::displayFraction(Max7221::Display::UPPER,voltage);
+
+    // read the current
+
+    uint32_t current=Ina226::readCurrent();
+    Max7221::displayFraction(Max7221::Display::LOWER,current);
 
     _lastSampleTime=MillisecondTimer::millis();
   }

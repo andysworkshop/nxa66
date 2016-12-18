@@ -11,15 +11,15 @@ namespace nxa66 {
 
 
   /*
-   * The voltmeter class uses the peripheral classes to read and display
+   * The meter class uses the peripheral classes to read and display
    * voltage values
    */
 
-  class Voltmeter {
+  class Meter {
     
     protected:
       enum {
-        SAMPLE_INTERVAL = 100
+        SAMPLE_INTERVAL = 200
       };
 
       uint32_t _lastSampleTime;
@@ -36,7 +36,7 @@ namespace nxa66 {
    * Initialise
    */
 
-  inline void Voltmeter::setup() {
+  inline void Meter::setup() {
     _lastSampleTime=0;
   }
 
@@ -45,7 +45,7 @@ namespace nxa66 {
    * Read the latest voltage and display it
    */
 
-  inline void Voltmeter::updateDisplay() {
+  inline void Meter::updateDisplay() {
 
     // enforce a minimum sample period
 
@@ -60,7 +60,14 @@ namespace nxa66 {
     // read the current
 
     uint32_t current=Ina226::readCurrent();
-    Max7221::displayFraction(Max7221::Display::LOWER,current);
+
+    // 65535 or near enough is returned when open loop. anything greater
+    // than our max current blanks the display
+    
+    if(current>25000)
+      Max7221::clearDisplay(Max7221::Display::LOWER);
+    else
+      Max7221::displayFraction(Max7221::Display::LOWER,current);
 
     _lastSampleTime=MillisecondTimer::millis();
   }

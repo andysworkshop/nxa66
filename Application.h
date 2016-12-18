@@ -23,5 +23,5 @@
 #include "PowerGood.h"
 #include "Wire.h"
 #include "Ina226.h"
-#include "Voltmeter.h"
+#include "Meter.h"
 #include "Program.h"

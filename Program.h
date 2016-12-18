@@ -16,7 +16,7 @@ namespace nxa66 {
   class Program {
 
     protected:
-      Voltmeter _voltmeter;
+      Meter _voltmeter;
 
     public:
       Program();

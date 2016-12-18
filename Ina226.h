@@ -46,8 +46,8 @@ namespace nxa66 {
     // first write the configuration register
 
     uint16_t averaging = 2;       // 16x averaging
-    uint16_t vbuscvt = 4;         // 1.1ms conversion time
-    uint16_t shuntcvt = 4;        // 1.1ms conversion time
+    uint16_t vbuscvt = 7;         // 8.244ms conversion time
+    uint16_t shuntcvt = 7;        // 8.244ms conversion time
     uint16_t opmode = 7;          // shunt and bus, continuous
 
     uint16_t cfg = 0x4000 | (averaging << 9) | (vbuscvt << 6) | (shuntcvt << 3) | opmode;

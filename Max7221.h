@@ -56,6 +56,7 @@ namespace nxa66 {
       static void intensity(uint8_t level);
 
       static void displayFraction(Display display,uint32_t value);
+      static void clearDisplay(Display display);
       static void debugOut(uint16_t value);
   };
 
@@ -177,6 +178,20 @@ namespace nxa66 {
     f %= 10;
 
     writeByte(digit,f);
+  }
+
+
+  /*
+   * clear down the display
+   */
+
+  inline void Max7221::clearDisplay(Display display) {
+
+    // get first digit
+
+    int digit=static_cast<int>(display==UPPER ? DIGIT4 : DIGIT0);
+    for(int i=digit;i<digit+4;i++)
+      writeByte(i,0xf);
   }
 
 

@@ -72,6 +72,14 @@ namespace nxa66 {
     GpioActionButton::setup();
     GpioActionButton::set();
 
+    // switches with pullups
+
+    GpioOutputEnableSwitch::setup();
+    GpioOutputEnableSwitch::set();
+
+    GpioVspSwitch::setup();
+    GpioVspSwitch::set();
+
     // initialisers
 
     MillisecondTimer::setup();

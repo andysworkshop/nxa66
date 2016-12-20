@@ -162,8 +162,12 @@ namespace nxa66 {
   typedef GpioOutputPin<GPIOB,5> GpioSpiClk;
 
   typedef GpioOutputPin<GPIOD,5> GpioOutputEnable;
-  typedef GpioOutputPin<GPIOD,3> GpioPowerOn;
+  typedef GpioInputPin<GPIOB,7> GpioOutputEnableSwitch;
+
   typedef GpioOutputPin<GPIOB,1> GpioVsp;
+  typedef GpioInputPin<GPIOB,6> GpioVspSwitch;
+
+  typedef GpioOutputPin<GPIOD,3> GpioPowerOn;
 
   typedef GpioOutputPin<GPIOC,3> GpioPowerGoodLed;
 

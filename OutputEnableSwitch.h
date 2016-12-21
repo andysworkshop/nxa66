@@ -14,29 +14,33 @@ namespace nxa66 {
   class OutputEnableSwitch : public Switch<GpioOutputEnableSwitch> {
 
     public:
-      void onSwitchInterrupt();
+      void run();
+      void activate();
   };
 
 
   /*
-   * Constructor
+   * Main loop
    */
 
-  inline OutputEnableSwitch::OutputEnableSwitch() {
+  inline void OutputEnableSwitch::run() {
 
-    PCICR |= _BV(PCIE0);      // enable int group 0..7
-    PCMSK0 |= _BV(PCINT7);    // enable interrupts 1,6,7
+    // check if the switch changed
 
-    extern OutputEnableSwitch *OutputEnableSwitchInstance;
-    OutputEnableSwitchInstance=this;
+    if(!Switch<GpioOutputEnableSwitch>::run())
+      return;
+
+    activate();
   }
 
 
-  /*
-   * Switch interrupt
-   */
+  inline void OutputEnableSwitch::activate() {
 
-  inline void OutputEnableSwitch::onSwitchInterrupt() {
-    Switch<GpioOutputEnableSwitch>::onSwitchInterrupt();
+    // switch is active low
+
+    if(getState())
+      OutputEnable::disable();
+    else
+      OutputEnable::enable();
   }
 }

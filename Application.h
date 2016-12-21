@@ -22,6 +22,8 @@
 #include "OutputEnable.h"
 #include "OutputEnableSwitch.h"
 #include "Vsp.h"
+#include "VspSwitch.h"
+#include "ActionButton.h"
 #include "PowerGood.h"
 #include "Wire.h"
 #include "Ina226.h"

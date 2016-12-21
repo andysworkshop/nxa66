@@ -22,11 +22,13 @@ namespace nxa66 {
       } _state;
 
       bool _pinState;
+      bool _pendingPinState;
+      uint32_t _pressTime;
 
     public:
       Switch();
 
-      void onSwitchInterrupt();
+      bool run();
       bool getState() const;
   };
 
@@ -37,7 +39,8 @@ namespace nxa66 {
 
   template<class TGpio>
   inline Switch<TGpio>::Switch() {
-    _currentState=TGpio::read();
+    _pinState=TGpio::read();
+    _state=IDLE;
   }
 
 
@@ -52,25 +55,36 @@ namespace nxa66 {
 
 
   /*
-   * Handle the switch interrupt
+   * Main loop
    */
 
   template<class TGpio>
-  inline void Switch<TGpio>::onSwitchInterrupt() {
+  inline bool Switch<TGpio>::run() {
 
-    // do nothing if in the debounce period
+    bool newState=TGpio::read();
 
-    if(_state==WAITING)
-      return;
+    switch(_state) {
 
-    // do nothing if our state has not proposed a change
+      case IDLE:
+        if(newState!=_pinState) {
+          _pendingPinState=newState;
+          _state=WAITING;
+          _pressTime=MillisecondTimer::millis();
+        }
+        return false;
 
-    bool newPinState=TGpio::read();
-    if(newPinState==_pinState)
-      return;
+      case WAITING:
+        if(MillisecondTimer::difference(_pressTime)>20) {
+     
+          _state=IDLE;
+          _pinState=newState;
+     
+          return newState==_pendingPinState;
+        }
+        return false;
 
-    // start the wait timer
-
-    _state=WAITING;
+      default:
+        return false;
+    }
   }
 }

@@ -9,7 +9,7 @@ namespace nxa66 {
 
   /*
    * The power-on line controls the relay that supplies power to the module. The relay has a maximum
-   * switching time of about 15ms. We use a delay of 100ms to be sure. 
+   * switching time of about 15ms. We use a delay of 500ms to be sure. 
    */
 
   class PowerOn {
@@ -28,11 +28,11 @@ namespace nxa66 {
 
   inline void PowerOn::enable() {
     GpioPowerOn::set();
-    MillisecondTimer::delay(100);
+    MillisecondTimer::delay(500);
   }
 
   inline void PowerOn::disable() {
     GpioPowerOn::reset();
-    MillisecondTimer::delay(100);
+    MillisecondTimer::delay(500);
   }
 }

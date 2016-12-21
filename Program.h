@@ -16,7 +16,8 @@ namespace nxa66 {
   class Program {
 
     protected:
-      Meter _voltmeter;
+      OutputEnableSwitch _outputEnableSwitch;
+      Meter _meter;
 
     public:
       Program();
@@ -95,8 +96,6 @@ namespace nxa66 {
 
     PowerGood::setup();
     Wire.begin();
-
-    _voltmeter.setup();
   }
 
 
@@ -121,7 +120,7 @@ namespace nxa66 {
     Ina226::calibrate();
 
     for(;;) {
-      _voltmeter.updateDisplay();
+      _meter.updateDisplay();
     }
   }
 }

@@ -25,7 +25,7 @@ namespace nxa66 {
       uint32_t _lastSampleTime;
 
     public:
-      void setup();
+      Meter();
 
     public:
       void updateDisplay();
@@ -33,10 +33,10 @@ namespace nxa66 {
 
 
   /*
-   * Initialise
+   * Constructor
    */
 
-  inline void Meter::setup() {
+  inline Meter::Meter() {
     _lastSampleTime=0;
   }
 

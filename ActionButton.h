@@ -16,17 +16,4 @@ namespace nxa66 {
     public:
       void run();
   };
-
-
-  /*
-   * Main loop
-   */
-
-  inline void ActionButton::run() {
-
-    // check if the switch changed
-
-    if(!Switch<GpioActionButton>::run())
-      return;
-  }
 }

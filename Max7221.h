@@ -56,6 +56,8 @@ namespace nxa66 {
       static void intensity(uint8_t level);
 
       static void displayFraction(Display display,uint32_t value);
+      static void displayText(Display display,const char *str);
+      static void displayNumber(Display display,uint16_t value);
       static void clearDisplay(Display display);
       static void debugOut(uint16_t value);
   };
@@ -89,7 +91,7 @@ namespace nxa66 {
 
     // mid intensity
 
-    intensity(8);
+    intensity(Eeprom::Reader::intensity());
 
     // turn on
 

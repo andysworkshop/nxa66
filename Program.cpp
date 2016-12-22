@@ -33,6 +33,10 @@ int main() {
   uint8_t dummy __attribute__((unused))=SPSR;
   dummy=SPDR;
 
+  // EEPROM validation
+
+  Eeprom::verifyState();
+
   // UART pins
 
   GpioUartTx::setup();

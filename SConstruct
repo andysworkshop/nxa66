@@ -9,11 +9,6 @@ Usage: scons [upload]
     specify this option to automatically upload to
     using avrdude to a USBASP connected MCU.
 
-Examples:
-
-  scons mains=50     // UK mains frequency
-  scons mains=60     // USA mains frequency
-
 To do a 'clean' use the -c flag
 To do a parallel build use the -jN flag
 """
@@ -35,9 +30,8 @@ env.Replace(PROGSUFFIX=".elf")
 env.Replace(CXXFLAGS=["-mmcu=atmega328p",
                       "-Os",
                       "-g",
-                      "-flto",
                       "-DF_CPU=8000000",
-                      "-std=c++11",
+                      "-std=c++1y",
                       "-Wall",
                       "-Werror",
                       "-Wextra",
@@ -51,7 +45,6 @@ env.Replace(CXXFLAGS=["-mmcu=atmega328p",
 env.Replace(CFLAGS=["-mmcu=atmega328p",
                       "-Os",
                       "-g",
-                      "-flto",
                       "-DF_CPU=8000000",
                       "-std=c99",
                       "-Wall",
@@ -65,7 +58,6 @@ env.Replace(CFLAGS=["-mmcu=atmega328p",
 
 env.Replace(LINKFLAGS=["-Wl,-Map,nxa66.map",
                        "-mrelax",
-                       "-flto",
                        "-Wl,--gc-sections",
                        "-mmcu=atmega328p"])
 

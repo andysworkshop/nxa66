@@ -9,6 +9,8 @@
 
 namespace nxa66 {
 
+  extern const uint8_t charTable [];
+
   /*
    * Handle interaction with the Max7221 SPI IC.
    */
@@ -56,10 +58,12 @@ namespace nxa66 {
       static void intensity(uint8_t level);
 
       static void displayFraction(Display display,uint32_t value);
-      static void displayText(Display display,const char *str);
-      static void displayNumber(Display display,uint16_t value);
       static void clearDisplay(Display display);
       static void debugOut(uint16_t value);
+
+      // these are in segment mode
+      static void displayText(Display display,const char *str);
+      static void displayNumber(Display display,uint16_t value);
   };
 
 
@@ -222,5 +226,43 @@ namespace nxa66 {
     value-=(digit*10);
     
     writeByte(DIGIT0,value);
+  }
+
+
+  /*
+   * Print an integer in segment mode. The integer must not exceed 4 digits
+   */
+
+  inline void Max7221::displayNumber(Display display,uint16_t value) {
+
+    char text[10];
+
+    itoa(value,text,10);
+    displayText(display,text); 
+  }
+
+
+  /*
+   * Print out text to the display. str must not be more than 4
+   * characters
+   */
+
+  inline void Max7221::displayText(Display display,const char *str) {
+
+    int digit=static_cast<int>(display==UPPER ? DIGIT4 : DIGIT0);
+    uint8_t count;
+
+    count=0;
+    for(const char *ptr=str;*ptr;ptr++) {
+       
+       uint8_t value=pgm_read_byte_near(charTable+*ptr); 
+       writeByte(digit++,value);
+       count++;
+    }
+
+    while(count<4) {
+      writeByte(digit++,0);
+      count++;
+    }
   }
 }

@@ -81,13 +81,14 @@ namespace nxa66 {
 
       bool actionButtonChanged=_actionButton.run();
 
-      if(_currentMenuItem==null) {
+      if(_currentMenuItem==nullptr) {
 
         // if the action button was pressed then we enter menu mode
 
-        if(actionButtonChanged && !_actionButton.getState()) 
+        if(actionButtonChanged && !_actionButton.getState()) {
           nextMenuItem(&_intensity);
-        else {
+        }
+        else
           _meter.updateDisplay();   // no relevant change, show the meter
       }
       else {
@@ -128,6 +129,11 @@ namespace nxa66 {
     if(_currentMenuItem)
       _currentMenuItem->finish();
 
+    // if entering menu mode, enable segment mode
+
+    if(_currentMenuItem==nullptr)
+      Max7221::segmentMode();
+
     // set the new one and start if required
 
     _currentMenuItem=next;
@@ -136,6 +142,8 @@ namespace nxa66 {
       _currentMenuItem->start();
       _menuIdleStart=MillisecondTimer::millis();
     }
+    else
+      Max7221::fontMode();
   }
 
 
@@ -148,6 +156,7 @@ namespace nxa66 {
     if(_currentMenuItem) {
       _currentMenuItem->cancel();
       _currentMenuItem=nullptr;
+      Max7221::fontMode();
     }
   }
 }

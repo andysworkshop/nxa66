@@ -9,7 +9,7 @@
 
 namespace nxa66 {
 
-  class IntensityMenuItem : public MenuItem {
+  class Intensity : public MenuItem {
 
     protected:
       uint8_t _intensity;
@@ -18,7 +18,7 @@ namespace nxa66 {
       void updateDisplay() const;
 
     public:
-      IntensityMenuItem(MenuItem *next);
+      Intensity(MenuItem *next);
 
       virtual void start() override;
       virtual void finish() override;
@@ -71,11 +71,11 @@ namespace nxa66 {
 
   inline void Intensity::onEncoder(int8_t direction) {
 
-    if(direction) {
+    if(direction>0) {
       if(_intensity<15)
         _intensity++;
     }
-    else {
+    else if(direction<0) {
       if(_intensity)
         _intensity--;
     }

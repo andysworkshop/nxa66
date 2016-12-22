@@ -29,6 +29,26 @@ namespace nxa66 {
       virtual void start() {}
       virtual void finish() {}
       virtual void cancel() {}
-      virtual void onEncoder(int8_t direction) {}
+      virtual void onEncoder(int8_t /* direction */) {}
+  
+      MenuItem *getNext() const;
   };
+
+
+  /*
+   * Constructor
+   */
+   
+  inline MenuItem::MenuItem(MenuItem *next)
+    : _next(next) {
+  }
+
+
+  /*
+   * Get the next item
+   */
+
+  inline MenuItem *MenuItem::getNext() const {
+    return _next;
+  }
 }

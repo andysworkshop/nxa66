@@ -12,8 +12,5 @@ namespace nxa66 {
    */
 
   class ActionButton : public Switch<GpioActionButton> {
-
-    public:
-      void run();
   };
 }

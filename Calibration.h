@@ -9,6 +9,12 @@
 
 namespace nxa66 {
 
+  /*
+   * INA226 current measurement calibration adjustment. Allows +/- 999 points to be added to
+   * the calibration value so that the displayed current can be made to match that of a
+   * calibrated measuring instrument
+   */
+   
   class Calibration : public MenuItem {
 
     protected:

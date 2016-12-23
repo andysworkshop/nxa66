@@ -23,6 +23,7 @@ namespace nxa66 {
       Meter _meter;
       uint32_t _menuIdleStart;
 
+      Limit _limit;
       Calibration _calibration;
       Intensity _intensity;
       Reset _reset;
@@ -45,7 +46,8 @@ namespace nxa66 {
    */
 
   inline Program::Program()
-    : _calibration(&_intensity),
+    : _limit(&_calibration),
+      _calibration(&_intensity),
       _intensity(&_reset),
       _reset(nullptr),
       _currentMenuItem(nullptr) {
@@ -91,7 +93,7 @@ namespace nxa66 {
         // if the action button was pressed then we enter menu mode
 
         if(actionButtonChanged && !_actionButton.getState()) {
-          nextMenuItem(&_calibration);
+          nextMenuItem(&_limit);
         }
         else
           _meter.updateDisplay();   // no relevant change, show the meter
@@ -131,7 +133,7 @@ namespace nxa66 {
           if(_currentMenuItem->isStarted())
             _currentMenuItem->onEncoder(direction);
           else
-            nextMenuItem(_currentMenuItem->getNext() ? _currentMenuItem->getNext() : &_calibration);
+            nextMenuItem(_currentMenuItem->getNext() ? _currentMenuItem->getNext() : &_limit);
 
           // reset the idle timer
 

@@ -93,7 +93,16 @@ namespace nxa66 {
     
     if(current>25000)
       Max7221::clearDisplay(display);
-    else
+    else {
+      
       Max7221::displayFraction(display,current);
+
+      // apply current limiting here. if the limit is breached then
+      // switch the output off
+
+      uint16_t limit=Eeprom::Reader::currentLimit();
+      if(current>limit)
+        OutputEnable::disable();
+    }
   }
 }

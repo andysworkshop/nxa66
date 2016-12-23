@@ -33,7 +33,7 @@
 #include "Ina226.h"
 #include "Meter.h"
 #include "MenuItem.h"
-//#include "Limit.h"
+#include "Limit.h"
 #include "Calibration.h"
 #include "Intensity.h"
 #include "Reset.h"

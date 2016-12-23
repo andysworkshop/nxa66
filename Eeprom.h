@@ -17,9 +17,10 @@ namespace nxa66 {
 
     enum class Location : uint8_t {
       MAGIC       = 0,      // 2 byte signature
-      INTENSITY   = 2,      // 1 byte
-      CALIBRATION = 3,      // 2 bytes
-      ILIMIT      = 5,      // 2 bytes
+      INTENSITY   = 2,      // 1 byte (8)
+      CALIBRATION = 3,      // 2 bytes (0)
+      ILIMIT      = 5,      // 2 bytes (20000)
+      LOGGER      = 7,      // 2 bytes (1000)
     };
 
 
@@ -51,6 +52,7 @@ namespace nxa66 {
         static uint8_t intensity();
         static int16_t calibration();
         static uint16_t currentLimit();
+        static uint16_t loggerInterval();
     };
 
     /*
@@ -64,6 +66,7 @@ namespace nxa66 {
       static void intensity(uint8_t i);
       static void calibration(int16_t cal);
       static void currentLimit(uint16_t limit);
+      static void loggerInterval(uint16_t interval);
     };
   };
 
@@ -123,6 +126,15 @@ namespace nxa66 {
 
 
   /*
+   * Read the logger interval
+   */
+
+  inline uint16_t Eeprom::Reader::loggerInterval() {
+    return eeprom_read_word(reinterpret_cast<uint16_t *>(Location::LOGGER));
+  }
+
+
+  /*
    * Write a byte to the location
    */
 
@@ -177,6 +189,15 @@ namespace nxa66 {
 
 
   /*
+   * Write the logger interval
+   */
+
+  inline void Eeprom::Writer::loggerInterval(uint16_t interval) {
+    eeprom_write_word(reinterpret_cast<uint16_t *>(Location::LOGGER),interval);
+  }
+
+
+  /*
    * Verify the content and default it if invalid
    */
 
@@ -201,9 +222,9 @@ namespace nxa66 {
 
     Writer::intensity(8);
 
-    // based on 20A current, 2m shunt resistor, 1mA/bit resolution
     Writer::calibration(0);
     Writer::currentLimit(20000);
+    Writer::loggerInterval(1000);
     Writer::magic();
   }
 }

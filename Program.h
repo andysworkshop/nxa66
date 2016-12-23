@@ -1,6 +1,6 @@
 /*
- * Andy's Workshop Reflow Controller ATMega328p firmware
- * Copyright (c) 2015 Andy Brown. http://www.andybrown.me.uk
+ * Andy's Workshop NXA66 controller ATMega328p firmware
+ * Copyright (c) 2017 Andy Brown. http://www.andybrown.me.uk
  * Please see website for licensing terms.
  */
 
@@ -21,13 +21,14 @@ namespace nxa66 {
       ActionButton _actionButton;
       Encoder _encoder;
       Meter _meter;
-      uint32_t _menuIdleStart;
+      DataLogger _dataLogger;      
 
       Limit _limit;
       Calibration _calibration;
       Intensity _intensity;
       Reset _reset;
       MenuItem *_currentMenuItem;
+      uint32_t _menuIdleStart;
 
     protected:
       void nextMenuItem(MenuItem* next);
@@ -83,6 +84,10 @@ namespace nxa66 {
       _outputEnableSwitch.run();
       _vspSwitch.run();
       _encoder.run();
+
+      // always update the data logger
+
+      _dataLogger.run();
 
       // the action button needs to be sampled
 

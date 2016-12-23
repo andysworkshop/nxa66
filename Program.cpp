@@ -16,7 +16,7 @@ int main() {
   using namespace nxa66;
   
   // disable watchdog
-  
+
   MCUSR = 0;
   wdt_disable();
 
@@ -91,6 +91,8 @@ int main() {
 
   PowerGood::setup();
   Wire.begin();
+
+  Uart::setup();
 
   // declare the program class
 

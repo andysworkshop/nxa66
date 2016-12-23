@@ -23,12 +23,15 @@ namespace nxa66 {
       Meter _meter;
       uint32_t _menuIdleStart;
 
+      Calibration _calibration;
       Intensity _intensity;
+      Reset _reset;
       MenuItem *_currentMenuItem;
 
     protected:
       void nextMenuItem(MenuItem* next);
       void cancelMenuItem();
+      void finishMenuItem();
 
     public:
       Program();
@@ -42,7 +45,9 @@ namespace nxa66 {
    */
 
   inline Program::Program()
-    : _intensity(nullptr),
+    : _calibration(&_intensity),
+      _intensity(&_reset),
+      _reset(nullptr),
       _currentMenuItem(nullptr) {
   }
 
@@ -67,7 +72,7 @@ namespace nxa66 {
 
     // calibrate the INA226
 
-    Ina226::calibrate();
+    Ina226::startup();
 
     for(;;) {
 
@@ -86,7 +91,7 @@ namespace nxa66 {
         // if the action button was pressed then we enter menu mode
 
         if(actionButtonChanged && !_actionButton.getState()) {
-          nextMenuItem(&_intensity);
+          nextMenuItem(&_calibration);
         }
         else
           _meter.updateDisplay();   // no relevant change, show the meter
@@ -95,15 +100,41 @@ namespace nxa66 {
 
         int8_t direction;
 
-        // check for the action button - move to next menu 
+        // loop
 
-        if(actionButtonChanged && !_actionButton.getState())
-          nextMenuItem(_currentMenuItem->getNext());
+        _currentMenuItem->run();
+
+        // check for the action button 
+
+        if(actionButtonChanged && !_actionButton.getState()) {
+          
+          if(_currentMenuItem->isStarted()) {
+
+            // item is running, give it a chance to consume the button
+            // otherwise finish the menu item
+
+            if(!_currentMenuItem->onActionButton())
+              finishMenuItem();
+          }
+          else  // item is not running, start it up
+            _currentMenuItem->start();
+
+          // reset the idle timer
+
+          _menuIdleStart=MillisecondTimer::millis();
+        }
         else if((direction=_encoder.getChange())!=0) {
 
-          // encode moved, pass on
-          
-          _currentMenuItem->onEncoder(direction);
+          // encoder has changed. if the menu item is running then it can
+          // consume the encoder otherwise we move to the next item
+
+          if(_currentMenuItem->isStarted())
+            _currentMenuItem->onEncoder(direction);
+          else
+            nextMenuItem(_currentMenuItem->getNext() ? _currentMenuItem->getNext() : &_calibration);
+
+          // reset the idle timer
+
           _menuIdleStart=MillisecondTimer::millis();
         }
         else {
@@ -124,26 +155,19 @@ namespace nxa66 {
 
   inline void Program::nextMenuItem(MenuItem* next) {
 
-    // finish the current item if there is one
-
-    if(_currentMenuItem)
-      _currentMenuItem->finish();
-
-    // if entering menu mode, enable segment mode
-
-    if(_currentMenuItem==nullptr)
-      Max7221::segmentMode();
-
-    // set the new one and start if required
-
     _currentMenuItem=next;
+    _currentMenuItem->propose();
+    _menuIdleStart=MillisecondTimer::millis();
+  }
 
-    if(_currentMenuItem) {
-      _currentMenuItem->start();
-      _menuIdleStart=MillisecondTimer::millis();
-    }
-    else
-      Max7221::fontMode();
+
+  /*
+   * finish and confirm this item
+   */
+
+  inline void Program::finishMenuItem() {
+    _currentMenuItem->finish();
+    _currentMenuItem=nullptr;
   }
 
 
@@ -156,7 +180,6 @@ namespace nxa66 {
     if(_currentMenuItem) {
       _currentMenuItem->cancel();
       _currentMenuItem=nullptr;
-      Max7221::fontMode();
     }
   }
 }

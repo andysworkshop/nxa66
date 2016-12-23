@@ -8,11 +8,13 @@
 
 #include <stdint.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <avr/pgmspace.h>
 #include <avr/eeprom.h>
+#include <avr/wdt.h>
 
 #include "GpioPin.h"
 #include "MillisecondTimer.h"
@@ -31,6 +33,8 @@
 #include "Ina226.h"
 #include "Meter.h"
 #include "MenuItem.h"
+//#include "Limit.h"
+#include "Calibration.h"
 #include "Intensity.h"
-//#include "Calibration.h"
+#include "Reset.h"
 #include "Program.h"

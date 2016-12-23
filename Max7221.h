@@ -50,18 +50,13 @@ namespace nxa66 {
 
       static void writeByte(Register reg,uint8_t byte);
       static void writeByte(int reg,uint8_t byte);
-      static void fontMode();
       static void segmentMode();
       static void shutdown();
       static void wakeup();
-      static void fontDigit(Register digit,uint8_t character);
       static void intensity(uint8_t level);
 
-      static void displayFraction(Display display,uint32_t value);
       static void clearDisplay(Display display);
-      static void debugOut(uint16_t value);
-
-      // these are in segment mode
+      static void displayFraction(Display display,uint16_t value);
       static void displayText(Display display,const char *str);
       static void displayNumber(Display display,uint16_t value);
   };
@@ -83,15 +78,14 @@ namespace nxa66 {
 
     writeByte(SCAN_LIMIT,7);
 
-    // set font mode
+    // set segment mode
 
-    fontMode();
+    segmentMode();
 
     // blank all digits
 
-    for(int i=DIGIT0;i<=DIGIT7;i++) {
-      fontDigit(static_cast<Register>(i),0xf);
-    }
+    clearDisplay(Display::UPPER);
+    clearDisplay(Display::LOWER);
 
     // mid intensity
 
@@ -103,14 +97,6 @@ namespace nxa66 {
   }
 
   
-  /*
-   * Control functions
-   */
-
-  inline void Max7221::fontMode() {
-    writeByte(DECODE_MODE,0xFF);
-  }
-
   inline void Max7221::segmentMode() {
     writeByte(DECODE_MODE,0);
   }
@@ -121,10 +107,6 @@ namespace nxa66 {
 
   inline void Max7221::wakeup() {
     writeByte(SHUTDOWN,1);
-  }
-
-  inline void Max7221::fontDigit(Register digit,uint8_t character) {
-    writeByte(digit,character);
   }
 
   inline void Max7221::intensity(uint8_t level) {
@@ -147,43 +129,15 @@ namespace nxa66 {
    * Show a fraction on the display. The value is in milli-whatever
    */
 
-  inline void Max7221::displayFraction(Display display,uint32_t value) {
+  inline void Max7221::displayFraction(Display display,uint16_t value) {
 
-    // get first digit
+    char buffer[10];
 
-    int digit=static_cast<int>(display==UPPER ? DIGIT4 : DIGIT0);
+    itoa(value/1000,buffer,10);
+    sprintf(buffer+strlen(buffer),".%03d",value % 1000);
+    buffer[5]='\0';
 
-    // integer part cannot be more than 2 digits
-
-    uint16_t i=value/1000;
-    uint16_t f = value % 1000;
-    uint8_t dp=f ? 0x80 : 0;
-    uint8_t maxFrac;
-
-    if(i>=10) {
-      writeByte(digit++,i/10);
-      writeByte(digit++,(i % 10) | dp);
-      maxFrac=2;
-    }
-    else {
-      writeByte(digit++,i | dp);
-      maxFrac=3;
-    }
-
-    // fractional part cannot be more than 3 digits and must fit
-
-    if(f>=100 && maxFrac==2)
-      f/=10;
-
-    if(maxFrac==3) {
-      writeByte(digit++,f/100);
-      f %= 100;
-    }
-
-    writeByte(digit++,f/10);
-    f %= 10;
-
-    writeByte(digit,f);
+    displayText(display,buffer);
   }
 
 
@@ -197,35 +151,7 @@ namespace nxa66 {
 
     int digit=static_cast<int>(display==UPPER ? DIGIT4 : DIGIT0);
     for(int i=digit;i<digit+4;i++)
-      writeByte(i,0xf);
-  }
-
-
-  /*
-   * Debug printing
-   */
-
-  inline void Max7221::debugOut(uint16_t value) {
-
-    uint16_t digit;
-
-    digit=value/10000;
-    writeByte(DIGIT4,digit);
-    value-=(digit*10000);
-
-    digit=value/1000;
-    writeByte(DIGIT5,digit);
-    value-=(digit*1000);
-    
-    digit=value/100;
-    writeByte(DIGIT6,digit);
-    value-=(digit*100);
-    
-    digit=value/10;
-    writeByte(DIGIT7,digit);
-    value-=(digit*10);
-    
-    writeByte(DIGIT0,value);
+      writeByte(i,0);
   }
 
 
@@ -255,9 +181,14 @@ namespace nxa66 {
     count=0;
     for(const char *ptr=str;*ptr;ptr++) {
        
-       uint8_t value=pgm_read_byte_near(charTable+*ptr); 
-       writeByte(digit++,value);
-       count++;
+      uint8_t value=pgm_read_byte_near(charTable+*ptr); 
+      if(ptr[1]=='.') {
+        value|=0x80;
+        ptr++;
+      }
+
+      writeByte(digit++,value);
+      count++;
     }
 
     while(count<4) {

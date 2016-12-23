@@ -14,6 +14,7 @@ namespace nxa66 {
     protected:
       enum {
         ADDRESS = 0x40,
+        CALIBRATION_BASE = 2560,
 
         CONFIGURATION = 0,
         SHUNT_VOLTAGE = 0x01,
@@ -29,12 +30,41 @@ namespace nxa66 {
       static void writeRegister(uint8_t reg,uint16_t value);
 
     public:
+      static void startup();
+      static void writeConfigRegister();
+      static void calibrate();
+      static void calibrateWith(int16_t offset);
+
       static uint32_t readShuntVoltage();
       static uint32_t readBusVoltage();
       static uint32_t readCurrent();
-
-      static void calibrate();
   };
+
+
+  /*
+   * Startup
+   */
+
+  inline void Ina226::startup() {
+    writeConfigRegister();
+    calibrate();
+  }
+
+
+  /*
+   * Write the config register
+   */
+
+  inline void Ina226::writeConfigRegister() {
+
+    const uint16_t averaging = 2;       // 16x averaging
+    const uint16_t vbuscvt = 7;         // 8.244ms conversion time
+    const uint16_t shuntcvt = 7;        // 8.244ms conversion time
+    const uint16_t opmode = 7;          // shunt and bus, continuous
+
+    uint16_t cfg = 0x4000 | (averaging << 9) | (vbuscvt << 6) | (shuntcvt << 3) | opmode;
+    writeRegister(CONFIGURATION,cfg);
+  }
 
 
   /*
@@ -42,18 +72,16 @@ namespace nxa66 {
    */
 
   inline void Ina226::calibrate() {
+    writeRegister(CALIBRATION,CALIBRATION_BASE + Eeprom::Reader::calibration());
+  }
 
-    // first write the configuration register
 
-    uint16_t averaging = 2;       // 16x averaging
-    uint16_t vbuscvt = 7;         // 8.244ms conversion time
-    uint16_t shuntcvt = 7;        // 8.244ms conversion time
-    uint16_t opmode = 7;          // shunt and bus, continuous
+  /*
+   * Write the calibration value (user specified)
+   */
 
-    uint16_t cfg = 0x4000 | (averaging << 9) | (vbuscvt << 6) | (shuntcvt << 3) | opmode;
-    writeRegister(CONFIGURATION,cfg);
-
-    writeRegister(CALIBRATION,Eeprom::Reader::calibration());
+  inline void Ina226::calibrateWith(int16_t offset) {
+    writeRegister(CALIBRATION,CALIBRATION_BASE + offset);
   }
 
 
@@ -80,9 +108,7 @@ namespace nxa66 {
    */
 
   inline uint32_t Ina226::readCurrent() {
-    
-    uint32_t maPerBit=Eeprom::Reader::maPerBit();
-    return readRegister(CURRENT)*maPerBit;
+    return readRegister(CURRENT);
   }
 
 

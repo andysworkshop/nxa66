@@ -15,6 +15,11 @@ int main() {
 
   using namespace nxa66;
   
+  // disable watchdog
+  
+  MCUSR = 0;
+  wdt_disable();
+
   // interrupts off
 
   cli();

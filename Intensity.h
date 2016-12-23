@@ -32,7 +32,7 @@ namespace nxa66 {
    */
 
   inline Intensity::Intensity(MenuItem *next)
-    : MenuItem(next) {
+    : MenuItem(next,"LED") {
   }
 
 
@@ -41,8 +41,10 @@ namespace nxa66 {
    */
 
   inline void Intensity::start() {
+
+    MenuItem::start();
+
     _intensity=Eeprom::Reader::intensity();
-    Max7221::displayText(Max7221::Display::UPPER,"LED");
     updateDisplay();
   }
 

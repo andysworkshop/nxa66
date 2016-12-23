@@ -19,7 +19,7 @@ namespace nxa66 {
       MAGIC       = 0,      // 2 byte signature
       INTENSITY   = 2,      // 1 byte
       CALIBRATION = 3,      // 2 bytes
-      MA_PER_BIT  = 5       // 1 byte
+      ILIMIT      = 5,      // 2 bytes
     };
 
 
@@ -49,8 +49,8 @@ namespace nxa66 {
         static uint16_t constant(Location l);
         static uint8_t readByte(Location l);
         static uint8_t intensity();
-        static uint16_t calibration();
-        static uint8_t maPerBit();
+        static int16_t calibration();
+        static uint16_t currentLimit();
     };
 
     /*
@@ -62,8 +62,8 @@ namespace nxa66 {
       static void constant(Location l,uint16_t c);
       static void writeByte(Location l,uint8_t b);
       static void intensity(uint8_t i);
-      static void calibration(uint16_t cal);
-      static void maPerBit(uint8_t ma);
+      static void calibration(int16_t cal);
+      static void currentLimit(uint16_t limit);
     };
   };
 
@@ -108,17 +108,17 @@ namespace nxa66 {
    * Read the INA226 calibration value
    */
 
-  inline uint16_t Eeprom::Reader::calibration() {
+  inline int16_t Eeprom::Reader::calibration() {
     return eeprom_read_word(reinterpret_cast<uint16_t *>(Location::CALIBRATION));
   }
 
 
   /*
-   * Read the milliamps per bit
+   * Read the current limit
    */
 
-  inline uint8_t Eeprom::Reader::maPerBit() {
-    return eeprom_read_byte(reinterpret_cast<uint8_t *>(Location::MA_PER_BIT));
+  inline uint16_t Eeprom::Reader::currentLimit() {
+    return eeprom_read_word(reinterpret_cast<uint16_t *>(Location::ILIMIT));
   }
 
 
@@ -162,17 +162,17 @@ namespace nxa66 {
    * Write the calibration
    */
 
-  inline void Eeprom::Writer::calibration(uint16_t cal) {
+  inline void Eeprom::Writer::calibration(int16_t cal) {
     eeprom_write_word(reinterpret_cast<uint16_t *>(Location::CALIBRATION),cal);
   }
 
 
   /*
-   * Write the milliamps per bit
+   * Write the current limit
    */
 
-  inline void Eeprom::Writer::maPerBit(uint8_t ma) {
-    eeprom_write_byte(reinterpret_cast<uint8_t *>(Location::MA_PER_BIT),ma);
+  inline void Eeprom::Writer::currentLimit(uint16_t limit) {
+    eeprom_write_word(reinterpret_cast<uint16_t *>(Location::ILIMIT),limit);
   }
 
 
@@ -202,9 +202,8 @@ namespace nxa66 {
     Writer::intensity(8);
 
     // based on 20A current, 2m shunt resistor, 1mA/bit resolution
-    Writer::calibration(2560);
-    Writer::maPerBit(1);
-
+    Writer::calibration(0);
+    Writer::currentLimit(20000);
     Writer::magic();
   }
 }

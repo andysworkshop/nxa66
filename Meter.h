@@ -29,6 +29,9 @@ namespace nxa66 {
 
     public:
       void updateDisplay();
+
+      static void updateVoltageDisplay(Max7221::Display display);
+      static void updateCurrentDisplay(Max7221::Display display);
   };
 
 
@@ -54,21 +57,43 @@ namespace nxa66 {
 
     // read the voltage
 
-    uint32_t voltage=Ina226::readBusVoltage();
-    Max7221::displayFraction(Max7221::Display::UPPER,voltage);
+    updateVoltageDisplay(Max7221::Display::UPPER);
+    updateCurrentDisplay(Max7221::Display::LOWER);
 
     // read the current
 
+
+    _lastSampleTime=MillisecondTimer::millis();
+  }
+  
+
+  /*
+   * Update the voltage display
+   */
+
+  inline void Meter::updateVoltageDisplay(Max7221::Display display) {
+
+    // read the voltage
+
+    uint32_t voltage=Ina226::readBusVoltage();
+    Max7221::displayFraction(display,voltage);
+  }
+
+  
+  /*
+   * Update the current display
+   */
+
+  inline void Meter::updateCurrentDisplay(Max7221::Display display) {
+    
     uint32_t current=Ina226::readCurrent();
 
     // 65535 or near enough is returned when open loop. anything greater
     // than our max current blanks the display
     
     if(current>25000)
-      Max7221::clearDisplay(Max7221::Display::LOWER);
+      Max7221::clearDisplay(display);
     else
-      Max7221::displayFraction(Max7221::Display::LOWER,current);
-
-    _lastSampleTime=MillisecondTimer::millis();
+      Max7221::displayFraction(display,current);
   }
 }

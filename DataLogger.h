@@ -12,7 +12,7 @@ namespace nxa66 {
 
   /*
    * Data logger class uses the UART to periodically send measurement data from
-   * the INA226. Data is
+   * the INA226. Data format is 19200bps 8-N-1. The TX interval is configurable.
    */
 
   class DataLogger {

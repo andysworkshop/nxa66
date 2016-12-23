@@ -8,14 +8,15 @@
 
 
 /*
- * Main entry point
+ * Main entry point. Note that the fuse settings for the application
+ * should be set for the internal 8MHz oscillator.
  */
 
 int main() {
 
   using namespace nxa66;
   
-  // disable watchdog
+  // disable watchdog in case we got here from a software reset
 
   MCUSR = 0;
   wdt_disable();

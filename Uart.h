@@ -10,7 +10,8 @@
 namespace nxa66 {
 
   /*
-   * The UART peripheral class handles sending data
+   * The UART peripheral class handles sending data. Data is transmitted
+   * asynchronously using the UDRIE interrupt.
    */
 
   class Uart {
@@ -33,9 +34,9 @@ namespace nxa66 {
 
   inline void Uart::setup() {
 
-    UBRR0 = 25;
-    UCSR0B |= (1 << TXEN0);                       // enable TX
-    UCSR0C = (1 << UCSZ01) | (1 << UCSZ00);       // 8-N-1
+    UBRR0 = 25;                               // 19200 bps
+    UCSR0B |= (1 << TXEN0);                   // enable TX
+    UCSR0C = (1 << UCSZ01) | (1 << UCSZ00);   // 8-N-1
   }
 
 
@@ -45,7 +46,7 @@ namespace nxa66 {
 
   inline void Uart::sendString(const char *buffer,uint8_t size) {
 
-    // cannot clobber existing
+    // cannot clobber an existing in-progress transmission
 
     if(_txlen)
       return;

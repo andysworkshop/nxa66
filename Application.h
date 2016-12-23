@@ -38,5 +38,6 @@
 #include "Limit.h"
 #include "Calibration.h"
 #include "Intensity.h"
+#include "Log.h"
 #include "Reset.h"
 #include "Program.h"

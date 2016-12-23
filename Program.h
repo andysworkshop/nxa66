@@ -25,6 +25,7 @@ namespace nxa66 {
 
       Limit _limit;
       Calibration _calibration;
+      Log _log;
       Intensity _intensity;
       Reset _reset;
       MenuItem *_currentMenuItem;
@@ -48,7 +49,8 @@ namespace nxa66 {
 
   inline Program::Program()
     : _limit(&_calibration),
-      _calibration(&_intensity),
+      _calibration(&_log),
+      _log(&_intensity),
       _intensity(&_reset),
       _reset(nullptr),
       _currentMenuItem(nullptr) {

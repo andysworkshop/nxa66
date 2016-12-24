@@ -66,6 +66,7 @@ namespace nxa66 {
    * Timer ticked at 1Hz, start a conversion
    */
 
+
   inline void Mcp9700::onTimerInterrupt() {
     startReading();
   }

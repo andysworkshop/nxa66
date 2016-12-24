@@ -11,11 +11,9 @@ namespace nxa66 {
    * The output-enable switch is on PB7.
    */
 
-  class OutputEnableSwitch : public Switch<GpioOutputEnableSwitch> {
-
-    public:
-      void run();
-      void activate();
+  struct OutputEnableSwitch : Switch<GpioOutputEnableSwitch> {
+    void run();
+    void activate();
   };
 
 

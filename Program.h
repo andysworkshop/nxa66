@@ -27,6 +27,7 @@ namespace nxa66 {
       Calibration _calibration;
       Log _log;
       Intensity _intensity;
+      FanThreshold _fanThreshold;
       Temperature _temperature;
       Reset _reset;
       MenuItem *_currentMenuItem;
@@ -52,7 +53,8 @@ namespace nxa66 {
     : _limit(&_calibration),
       _calibration(&_log),
       _log(&_intensity),
-      _intensity(&_temperature),
+      _intensity(&_fanThreshold),
+      _fanThreshold(&_temperature),
       _temperature(&_reset),
       _reset(nullptr),
       _currentMenuItem(nullptr) {

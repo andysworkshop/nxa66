@@ -169,6 +169,8 @@ namespace nxa66 {
 
   typedef GpioOutputPin<GPIOD,3> GpioPowerOn;
 
+  typedef GpioOutputPin<GPIOD,4> GpioFanSwitch;
+
   typedef GpioOutputPin<GPIOC,3> GpioPowerGoodLed;
 
   struct GpioSpiMosi : GpioOutputPin<GPIOB,3> {

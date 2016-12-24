@@ -21,6 +21,8 @@ namespace nxa66 {
       CALIBRATION = 3,      // 2 bytes (0)
       ILIMIT      = 5,      // 2 bytes (20000)
       LOGGER      = 7,      // 2 bytes (1000)
+      FAN_ON      = 9,      // 1 byte fan on temperature (50)
+      FAN_OFF     = 10,     // 1 byte fan off temperature (40)
     };
 
 
@@ -53,6 +55,8 @@ namespace nxa66 {
         static int16_t calibration();
         static uint16_t currentLimit();
         static uint16_t loggerInterval();
+        static uint8_t fanOn();
+        static uint8_t fanOff();
     };
 
     /*
@@ -67,6 +71,8 @@ namespace nxa66 {
       static void calibration(int16_t cal);
       static void currentLimit(uint16_t limit);
       static void loggerInterval(uint16_t interval);
+      static void fanOn(uint8_t temp);
+      static void fanOff(uint8_t temp);
     };
   };
 
@@ -135,6 +141,24 @@ namespace nxa66 {
 
 
   /*
+   * Read the fan on temperature
+   */
+
+  inline uint8_t Eeprom::Reader::fanOn() {
+    return eeprom_read_byte(reinterpret_cast<uint8_t *>(Location::FAN_ON));
+  }
+
+
+  /*
+   * Read the fan on temperature
+   */
+
+  inline uint8_t Eeprom::Reader::fanOff() {
+    return eeprom_read_byte(reinterpret_cast<uint8_t *>(Location::FAN_OFF));
+  }
+
+
+  /*
    * Write a byte to the location
    */
 
@@ -198,6 +222,24 @@ namespace nxa66 {
 
 
   /*
+   * Write the fan on temperature
+   */
+
+  inline void Eeprom::Writer::fanOn(uint8_t temp) {
+    eeprom_write_byte(reinterpret_cast<uint8_t *>(Location::FAN_ON),temp);
+  }
+
+
+  /*
+   * Write the fan off temperature
+   */
+
+  inline void Eeprom::Writer::fanOff(uint8_t temp) {
+    eeprom_write_byte(reinterpret_cast<uint8_t *>(Location::FAN_OFF),temp);
+  }
+
+
+  /*
    * Verify the content and default it if invalid
    */
 
@@ -225,6 +267,8 @@ namespace nxa66 {
     Writer::calibration(0);
     Writer::currentLimit(20000);
     Writer::loggerInterval(1000);
+    Writer::fanOn(50);
+    Writer::fanOff(40);
     Writer::magic();
   }
 }

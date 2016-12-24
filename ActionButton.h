@@ -11,6 +11,5 @@ namespace nxa66 {
    * The Action button is on PC1
    */
 
-  class ActionButton : public Switch<GpioActionButton> {
-  };
+  typedef Switch<GpioActionButton> ActionButton;
 }

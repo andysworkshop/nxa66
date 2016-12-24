@@ -11,13 +11,11 @@ namespace nxa66 {
    * The output-enable line controls the EN pin of the supply.
    */
 
-  class OutputEnable {
+  struct OutputEnable {
+    static void setup();
 
-    public:
-      static void setup();
-
-      static void enable();
-      static void disable();
+    static void enable();
+    static void disable();
   };
   
 

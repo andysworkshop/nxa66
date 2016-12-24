@@ -40,6 +40,8 @@
 #include "Calibration.h"
 #include "Intensity.h"
 #include "Log.h"
+#include "FanThreshold.h"
 #include "Reset.h"
+#include "FanSwitch.h"
 #include "Temperature.h"
 #include "Program.h"

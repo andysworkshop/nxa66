@@ -18,7 +18,7 @@ namespace nxa66 {
 
     protected:
       uint16_t _limit;
-      enum Adjstment {
+      enum Adjustment {
         AMPS,
         MILLIAMPS
       } _adjustment;

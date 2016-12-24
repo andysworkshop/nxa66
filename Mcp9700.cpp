@@ -6,6 +6,7 @@
 
 #include "Application.h"
 
+
 namespace nxa66 {
   volatile uint8_t Mcp9700::_temperature = 0;
 }

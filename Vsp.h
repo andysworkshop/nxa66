@@ -13,13 +13,11 @@ namespace nxa66 {
    * module is powered up so we shut it down while changing.
    */
 
-  class Vsp {
+  struct Vsp {
+    static void setup();
 
-    public:
-      static void setup();
-
-      static void normal();
-      static void vsp();
+    static void normal();
+    static void vsp();
   };
 
 

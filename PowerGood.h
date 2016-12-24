@@ -15,14 +15,11 @@ namespace nxa66 {
    * when it's good
    */
 
-  class PowerGood {
+  struct PowerGood {
+    static void setup();
 
-    public:
-      static void setup();
-
-    public:
-      static void onPowerGoodInterrupt();
-      static void setLedState();
+    static void onPowerGoodInterrupt();
+    static void setLedState();
   };
 
 

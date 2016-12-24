@@ -11,11 +11,9 @@ namespace nxa66 {
    * The VSP switch is on PB6.
    */
 
-  class VspSwitch : public Switch<GpioVspSwitch> {
-
-    public:
-      void run();
-      void activate();
+  struct VspSwitch : Switch<GpioVspSwitch> {
+    void run();
+    void activate();
   };
 
 

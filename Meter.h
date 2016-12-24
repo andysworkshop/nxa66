@@ -91,7 +91,7 @@ namespace nxa66 {
     // 65535 or near enough is returned when open loop. anything greater
     // than our max current blanks the display
     
-    if(current>25000)
+    if(current>25000 || current==0)
       Max7221::clearDisplay(display);
     else {
       

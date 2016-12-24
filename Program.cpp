@@ -95,6 +95,8 @@ int main() {
 
   Uart::setup();
 
+  Mcp9700::setup();
+
   // declare the program class
 
   nxa66::Program p;

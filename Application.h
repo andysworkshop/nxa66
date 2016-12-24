@@ -31,6 +31,7 @@
 #include "PowerGood.h"
 #include "Uart.h"
 #include "Wire.h"
+#include "Mcp9700.h"
 #include "Ina226.h"
 #include "Meter.h"
 #include "DataLogger.h"
@@ -40,4 +41,5 @@
 #include "Intensity.h"
 #include "Log.h"
 #include "Reset.h"
+#include "Temperature.h"
 #include "Program.h"

@@ -95,6 +95,7 @@ int main() {
 
   Uart::setup();
 
+  GpioFanSwitch::setup();
   Mcp9700::setup();
 
   // declare the program class

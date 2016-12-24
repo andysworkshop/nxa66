@@ -94,6 +94,20 @@ namespace nxa66 {
     result/=10000;          // scale uV to C (10,000uV / C)
 
     _temperature=result;    // we're in the 8-bit range now
+
+    // turn the fan on/off according to the trigger thresholds
+
+    uint8_t trigger=Eeprom::Reader::fanOn();
+
+    if(result>=trigger)
+      FanSwitch::enable();
+    else {
+
+      trigger=Eeprom::Reader::fanOff();
+
+      if(result<=trigger)
+        FanSwitch::disable();
+    }
   }
 
 

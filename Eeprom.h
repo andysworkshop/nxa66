@@ -21,8 +21,8 @@ namespace nxa66 {
       CALIBRATION = 3,      // 2 bytes (0)
       ILIMIT      = 5,      // 2 bytes (20000)
       LOGGER      = 7,      // 2 bytes (1000)
-      FAN_ON      = 9,      // 1 byte fan on temperature (50)
-      FAN_OFF     = 10,     // 1 byte fan off temperature (40)
+      FAN_ON      = 9,      // 1 byte fan on temperature (40)
+      FAN_OFF     = 10,     // 1 byte fan off temperature (30)
     };
 
 
@@ -267,8 +267,8 @@ namespace nxa66 {
     Writer::calibration(0);
     Writer::currentLimit(20000);
     Writer::loggerInterval(1000);
-    Writer::fanOn(50);
-    Writer::fanOff(40);
+    Writer::fanOn(40);
+    Writer::fanOff(30);
     Writer::magic();
   }
 }

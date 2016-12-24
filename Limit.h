@@ -55,6 +55,7 @@ namespace nxa66 {
 
     _limit=Eeprom::Reader::currentLimit();
     _adjustment=AMPS;
+    Max7221::writeByte(Max7221::DIGIT7,0b01000000);   // high indicator
 
     updateDisplay();
   }
@@ -104,6 +105,7 @@ namespace nxa66 {
 
     if(_adjustment==AMPS) {
       _adjustment=MILLIAMPS;
+      Max7221::writeByte(Max7221::DIGIT7,0b00001000);   // low indicator
       return true;
     }
 

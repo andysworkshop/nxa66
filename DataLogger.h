@@ -69,7 +69,9 @@ namespace nxa66 {
     // calculate the 8-bit CRC of the characters so far
 
     uint8_t crc=0;
-    for(char *ptr=buffer,*ptr;ptr++)
+    char *ptr;
+    
+    for(ptr=buffer;*ptr;ptr++)
       crc=_crc8_ccitt_update(crc,*ptr);
 
     // tack on the CRC to the end of the buffer

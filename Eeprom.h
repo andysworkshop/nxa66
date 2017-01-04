@@ -9,6 +9,11 @@
 
 namespace nxa66 {
 
+  /*
+   * General utilities to read/write configuration values to the EEPROM. Functionality
+   * is divided between Reader and Writer classes.
+   */
+   
   struct Eeprom {
 
     /*

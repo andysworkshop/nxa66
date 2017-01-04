@@ -6,6 +6,12 @@
 
 #pragma once
 
+/*
+ * This is the one and only header file included by the few .cpp files.
+ * There is no need to include any other header anywhere in this project.
+ */
+
+
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>

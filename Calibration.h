@@ -18,8 +18,12 @@ namespace nxa66 {
   class Calibration : public MenuItem {
 
     protected:
-      int16_t _calibration;
-      uint32_t _lastUpdated;
+      enum {
+        DISPLAY_UPDATE_INTERVAL = 200
+      };
+      
+      int16_t _calibration;       // read from EEPROM
+      uint32_t _lastUpdated;      // last time we updated the current display
 
     protected:
       void updateDisplay() const;
@@ -36,7 +40,7 @@ namespace nxa66 {
 
 
   /*
-   * Constructor
+   * Constructor: set up the menu prompt
    */
 
   inline Calibration::Calibration(MenuItem *next)
@@ -50,12 +54,14 @@ namespace nxa66 {
 
   inline void Calibration::run() {
 
+    // nothing to do until the user selects this menu item
+
     if(!isStarted())
       return;
 
-    // show the current at the top
+    // show the current at the top every 
 
-    if(MillisecondTimer::difference(_lastUpdated)>200) {
+    if(MillisecondTimer::difference(_lastUpdated)>DISPLAY_UPDATE_INTERVAL) {
       Meter::updateCurrentDisplay(Max7221::Display::UPPER);
       _lastUpdated=MillisecondTimer::millis();
     }
@@ -68,7 +74,11 @@ namespace nxa66 {
 
   inline void Calibration::start() {
 
+    // always call the base class
+
     MenuItem::start();
+
+    // initialise by reading from EEPROM and update the display
 
     _calibration=Eeprom::Reader::calibration();
     _lastUpdated=0;
@@ -81,6 +91,9 @@ namespace nxa66 {
    */
 
   inline void Calibration::finish() {
+    
+    // write back the new calibration value to EEPROM
+
     Eeprom::Writer::calibration(_calibration);
   }
 
@@ -90,6 +103,9 @@ namespace nxa66 {
    */
 
   inline void Calibration::cancel() {
+    
+    // cancel by restoring the old calibration value
+
     Ina226::calibrate();
   }
 
@@ -100,6 +116,8 @@ namespace nxa66 {
 
   inline void Calibration::onEncoder(int8_t direction) {
 
+    // adjust to a new setting
+
     if(direction>0) {
       if(_calibration<999)
         _calibration++;
@@ -109,6 +127,8 @@ namespace nxa66 {
         _calibration--;
     }
 
+    // set the calibration value
+    
     Ina226::calibrateWith(_calibration);
     updateDisplay();
   }

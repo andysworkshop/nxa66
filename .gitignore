@@ -2,7 +2,7 @@
 *.siz
 *.map
 *.lst
-*.hex
+nxa66.hex
 *.o
 .sconsign.dblite
 .settings/

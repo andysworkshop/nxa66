@@ -1,6 +1,6 @@
 = NXA66 Power Supply Controller Firmware
 
-This repo contains the firmware for the power supply controller that I built to host the Artesyn NXA66 voltage regulator (power supply) module that you can pick up cheaply on ebay. You can see the full write up at my blog.
+This repo contains the firmware for the power supply controller that I built to host the Artesyn NXA66 voltage regulator (power supply) module that you can pick up cheaply on ebay. You can see the full write up [at my blog](http://andybrown.me.uk/2017/01/14/nxa66-psu).
 
 ![controller](http://andybrown.me.uk/wk/wp-content/images/nxa66/running.jpg)
 
@@ -16,7 +16,7 @@ I use `avrdude` and I flash directly to the Atmega328p while it's mounted in the
 
 We do this step so that the Atmega328p will use its internal 8MHz RC oscillator as the MCU clock source. If your Atmega328p is fresh from the factory then you don't need to do this because the factory settings are correct. You only need to do this if your Atmega328p has been set to use an external crystal which will be the case if you've pulled it from an Arduino board.
 
-I program my fuses using `avrdude`. You can see the command to do this in the blog article on my website. The command I use to do that is:
+I program my fuses using `avrdude`. You can see the command to do this in the [blog article](http://andybrown.me.uk/2017/01/14/nxa66-psu/) on my website. The command I use to do that is:
 
     avrdude -c usbasp -p m328p -e -U lfuse:w:0xe2:m -U hfuse:w:0xde:m
 
